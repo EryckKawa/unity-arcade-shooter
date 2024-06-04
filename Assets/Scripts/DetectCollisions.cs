@@ -5,16 +5,21 @@ using UnityEngine;
 public class DetectCollisions : MonoBehaviour
 {
 	private const string PLAYER = "Player";
+	private const string ANIMAL = "Animal";
+
+	private int scoreIncrement = 10;
+	private int livesDecrement = -1;
+
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.CompareTag(PLAYER))
 		{
-			//Destroy the animal
+			GameManager.Instance.AddLives(livesDecrement);
 			Destroy(gameObject);
 		}
-		else
+		else if (other.CompareTag(ANIMAL))
 		{
-			//Destroy the animal
+			GameManager.Instance.AddScore(scoreIncrement);
 			Destroy(gameObject);
 			Destroy(other.gameObject);
 		}

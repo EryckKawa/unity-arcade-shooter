@@ -10,9 +10,6 @@ public class SpawnManager : MonoBehaviour
 
 	[SerializeField] private GameObject[] animalsPrefabs;
 
-	[SerializeField] private float spawnRangeX = 17;
-	[SerializeField] private float spawnRangeZ = 20;
-
 
 	[SerializeField] private float startDelay = 2;
 	[SerializeField] private float repeatDelay = 1.5f;
@@ -34,6 +31,8 @@ public class SpawnManager : MonoBehaviour
 
 	private void SpawnRandomAnimalUpper()
 	{
+		float spawnRangeX = 17;
+		float spawnRangeZ = 20;
 		int animalIndex = Random.Range(0, animalsPrefabs.Length);
 		Vector3 spawnPosition = new Vector3(Random.Range(-spawnRangeX, spawnRangeX), 0, spawnRangeZ);
 
@@ -47,7 +46,7 @@ public class SpawnManager : MonoBehaviour
 		float spawnPosX = 26;
 
 		int animalIndex = Random.Range(0, animalsPrefabs.Length);
-		
+
 		Vector3 rotation = new Vector3(0, 90, 0);
 		Vector3 spawnPosition = new Vector3(-spawnPosX, 0, Random.Range(spawnRangeZLeft, spawnRangeZRight));
 
