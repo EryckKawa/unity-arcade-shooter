@@ -5,9 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 	private float horizontalInput;
+	private float verticalInput;
 	[SerializeField] private float movSpeed;
 	[SerializeField] private float xRange;
-	
+	[SerializeField] private float zRangeUpper;
+	[SerializeField] private float zRangeBottom;
+
 	[SerializeField] private GameObject projectilePrefab;
 
 	// Start is called before the first frame update
@@ -24,19 +27,38 @@ public class PlayerController : MonoBehaviour
 		{
 			transform.position = new Vector3(-xRange, transform.position.y, transform.position.z);
 		}
-		
+
 		if (transform.position.x > xRange)
 		{
 			transform.position = new Vector3(xRange, transform.position.y, transform.position.z);
 		}
-		
-		horizontalInput = Input.GetAxis("Horizontal");
-		transform.Translate(horizontalInput * movSpeed * Time.deltaTime * Vector3.right);
-		
-		//Instantiate a projectile prefab
-		if (Input.GetKeyDown(KeyCode.Space))
+		if (transform.position.z > zRangeUpper)
 		{
-			Instantiate(projectilePrefab, transform.position, projectilePrefab.transform.rotation);
+			transform.position = new Vector3(transform.position.x, 0, zRangeUpper);
+		}
+		if (transform.position.z < zRangeBottom)
+		{
+			transform.position = new Vector3(transform.position.x, 0, zRangeBottom);
+		}
+		horizontalInput = Input.GetAxis("Horizontal");
+		verticalInput = Input.GetAxis("Vertical");
+
+		Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
+
+		if (movementDirection != Vector3.zero)
+		{
+			movementDirection = movementDirection.normalized;
+			
+			float rotateSpeed = 7f;
+			transform.forward = Vector3.Slerp(transform.forward, movementDirection, Time.deltaTime * rotateSpeed);
+		}
+
+		transform.Translate(movementDirection * movSpeed * Time.deltaTime, Space.World);
+
+		//Instantiate a projectile prefab
+		if (Input.GetKeyDown(KeyCode.Mouse0))
+		{
+			Instantiate(projectilePrefab, transform.position, transform.rotation);
 		}
 	}
 }
