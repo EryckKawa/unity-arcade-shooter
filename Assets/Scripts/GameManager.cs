@@ -1,45 +1,46 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-	[SerializeField] private int lifes;
-	[SerializeField] private int score;
+    public static GameManager Instance;
 
-	public static GameManager Instance { get; private set; }
+    private int score;
+    private int lives;
 
-	private void Awake()
-	{
-		if (Instance == null)
-		{
-			Instance = this;
-		}
-		else
-		{
-			Destroy(gameObject);  // Se já existe uma instância, destrua este objeto
-		}
-	}
+    public static event Action<int> OnScoreChanged;
 
-	public void AddLives(int value)
-	{
-		lifes += value;
-		if (lifes <= 0)
-		{
-			lifes = 0;
-		}
-	}
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
-	public void AddScore(int value)
-	{
-		score += value;
-	}
+    public void AddScore(int amount)
+    {
+        score += amount;
+        OnScoreChanged?.Invoke(score);
+    }
 
-	public int GetLives()
-	{
-		return lifes;
-	}
+    public void AddLives(int amount)
+    {
+        lives += amount;
+        // Atualizar UI de vidas se necessário
+    }
 
-	public int GetScore()
-	{
-		return score;
-	}
+    public int GetScore()
+    {
+        return score;
+    }
+
+    public int GetLives()
+    {
+        return lives;
+    }
 }
